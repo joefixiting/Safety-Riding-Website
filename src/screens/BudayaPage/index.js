@@ -1,1 +1,0 @@
-export { BudayaPage } from "./BudayaPage";

@@ -1,1 +1,0 @@
-export { TentangPage } from './TentangPage';

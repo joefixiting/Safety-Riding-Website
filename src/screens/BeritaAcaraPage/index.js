@@ -1,1 +1,0 @@
-export { BeritaAcaraPage } from "./BeritaAcaraPage";
