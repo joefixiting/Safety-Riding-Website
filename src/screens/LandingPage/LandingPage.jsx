@@ -107,7 +107,7 @@ export const LandingPage = () => {
     return () => { document.body.style.overflow = "auto"; };
   }, []);
 
-  // ================= RENDER KONTEN FAKTOR DINAMIS =================
+// ================= RENDER KONTEN FAKTOR DINAMIS =================
   const renderFactorContent = () => {
     switch(currentFactor) {
       case 0:
@@ -118,31 +118,39 @@ export const LandingPage = () => {
         );
       case 1:
         return (
-          // Dihapus wrapper relative tambahan dan instruksi scroll gandanya
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8 w-full text-left mt-4 max-h-[55vh] md:max-h-[60vh] overflow-y-auto hide-scrollbar pb-8 px-2">
-            <div className="bg-black/50 border border-white/20 p-5 sm:p-8 rounded-2xl hover:bg-black/70 backdrop-blur-md transition cursor-pointer flex flex-col shadow-xl" onClick={() => setModalImage(MediaAturan)}>
-              <h4 className="font-bold text-amber-400 text-base sm:text-xl mb-4 sm:mb-6">1. Aturan Lalu Lintas</h4>
-              <div className="relative w-full h-32 sm:h-48 overflow-hidden rounded-xl bg-black/50 group">
-                <img src={MediaAturan} alt="Aturan Lalu Lintas" className="w-full h-full object-cover opacity-80 group-hover:scale-110 transition duration-500" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="bg-black/60 px-3 py-2 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm text-white font-bold tracking-wide">🔍 Klik Perbesar</span>
+          <div className="relative w-full flex flex-col items-center">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8 w-full text-left mt-4 max-h-[55vh] md:max-h-[60vh] overflow-y-auto hide-scrollbar pb-4 px-2">
+              <div className="bg-black/50 border border-white/20 p-5 sm:p-8 rounded-2xl hover:bg-black/70 backdrop-blur-md transition cursor-pointer flex flex-col shadow-xl" onClick={() => setModalImage(MediaAturan)}>
+                <h4 className="font-bold text-amber-400 text-base sm:text-xl mb-4 sm:mb-6">1. Aturan Lalu Lintas</h4>
+                <div className="relative w-full h-32 sm:h-48 overflow-hidden rounded-xl bg-black/50 group">
+                  <img src={MediaAturan} alt="Aturan Lalu Lintas" className="w-full h-full object-cover opacity-80 group-hover:scale-110 transition duration-500" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="bg-black/60 px-3 py-2 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm text-white font-bold tracking-wide">🔍 Klik Perbesar</span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="bg-black/50 border border-white/20 p-5 sm:p-8 rounded-2xl backdrop-blur-md shadow-xl">
-              <h4 className="font-bold text-amber-400 text-base sm:text-xl mb-4 sm:mb-6">2. Teknik Berkendara Aman</h4>
-              <div className="space-y-2 sm:space-y-3 text-xs sm:text-lg text-white/90">
-                <p>- Mengatur kecepatan sesuai kondisi jalan</p>
-                <p>- Menjaga jarak aman</p>
-                <p>- Fokus dan waspada saat berkendara</p>
-                <p>- Berkendara secara defensif untuk mengantisipasi kesalahan dari pengendara lain</p>
+              <div className="bg-black/50 border border-white/20 p-5 sm:p-8 rounded-2xl backdrop-blur-md shadow-xl">
+                <h4 className="font-bold text-amber-400 text-base sm:text-xl mb-4 sm:mb-6">2. Teknik Berkendara Aman</h4>
+                <div className="space-y-2 sm:space-y-3 text-xs sm:text-lg text-white/90">
+                  <p>- Mengatur kecepatan sesuai kondisi jalan</p>
+                  <p>- Menjaga jarak aman</p>
+                  <p>- Fokus dan waspada saat berkendara</p>
+                  <p>- Berkendara secara defensif untuk mengantisipasi kesalahan dari pengendara lain</p>
+                </div>
+              </div>
+              <div className="bg-black/50 border border-white/20 p-5 sm:p-8 rounded-2xl backdrop-blur-md shadow-xl">
+                <h4 className="font-bold text-amber-400 text-base sm:text-xl mb-4 sm:mb-6">3. Risiko dan Bahaya</h4>
+                <p className="text-xs sm:text-lg text-white/90 text-justify leading-relaxed">
+                  Driver perlu memahami berbagai potensi bahaya, seperti jalan berlubang, kendaraan lain yang tidak tertib, serta kondisi cuaca. Dengan mengetahui risiko tersebut, driver dapat lebih waspada dan mengantisipasi kemungkinan terjadinya kecelakaan.
+                </p>
               </div>
             </div>
-            <div className="bg-black/50 border border-white/20 p-5 sm:p-8 rounded-2xl backdrop-blur-md shadow-xl">
-              <h4 className="font-bold text-amber-400 text-base sm:text-xl mb-4 sm:mb-6">3. Risiko dan Bahaya</h4>
-              <p className="text-xs sm:text-lg text-white/90 text-justify leading-relaxed">
-                Driver perlu memahami berbagai potensi bahaya, seperti jalan berlubang, kendaraan lain yang tidak tertib, serta kondisi cuaca. Dengan mengetahui risiko tersebut, driver dapat lebih waspada dan mengantisipasi kemungkinan terjadinya kecelakaan.
-              </p>
+            {/* Indikator scroll kotak khusus di HP */}
+            <div className="flex md:hidden flex-col items-center justify-center text-white/70 text-[10px] animate-bounce pointer-events-none mt-2">
+              <span>Geser kotak ke bawah</span>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4 mt-0.5 text-amber-400">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3" />
+              </svg>
             </div>
           </div>
         );
@@ -184,10 +192,9 @@ export const LandingPage = () => {
         );
       case 6:
         return (
-          // Dihapus relative dan instruksi scroll gandanya
-          <div className="w-full text-left">
-            <p className="text-xs sm:text-lg text-white/80 mb-4 sm:mb-6 text-center px-4">Sesuai dengan UU No. 22 Tahun 2009 dan PP No. 55 Tahun 2012 tentang Kendaraan.</p>
-            <div className="flex flex-wrap justify-center gap-3 sm:gap-6 max-h-[48vh] sm:max-h-[55vh] overflow-y-auto hide-scrollbar pb-8 px-1 sm:px-2">
+          <div className="w-full text-left flex flex-col items-center">
+            <p className="text-xs sm:text-lg text-white/80 mb-4 sm:mb-6 text-center px-4 w-full">Sesuai dengan UU No. 22 Tahun 2009 dan PP No. 55 Tahun 2012 tentang Kendaraan.</p>
+            <div className="flex flex-wrap justify-center gap-3 sm:gap-6 max-h-[45vh] sm:max-h-[55vh] overflow-y-auto hide-scrollbar pb-4 px-1 sm:px-2 w-full">
               {kondisiKendaraan.map((item, idx) => (
                 <div key={idx} className="bg-black/50 border border-white/20 p-4 sm:p-6 rounded-2xl w-full sm:w-[46%] lg:w-[30%] backdrop-blur-md shadow-xl">
                   <h4 className="font-bold text-amber-400 text-sm sm:text-lg mb-2 sm:mb-4">{item.title}</h4>
@@ -198,6 +205,13 @@ export const LandingPage = () => {
                   </div>
                 </div>
               ))}
+            </div>
+            {/* Indikator scroll kotak khusus di HP */}
+            <div className="flex md:hidden flex-col items-center justify-center text-white/70 text-[10px] animate-bounce pointer-events-none mt-3">
+              <span>Geser kotak ke bawah</span>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4 mt-0.5 text-amber-400">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3" />
+              </svg>
             </div>
           </div>
         );
@@ -303,13 +317,7 @@ export const LandingPage = () => {
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-6 h-6 sm:w-12 sm:h-12"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
           </button>
 
-          {/* === INDIKATOR SCROLL (HANYA DI HP) === */}
-          <div className="absolute bottom-12 left-0 right-0 z-30 flex md:hidden flex-col items-center justify-center text-white/70 text-[10px] animate-bounce pointer-events-none">
-            <span>Geser layar untuk membaca</span>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4 mt-0.5 text-amber-400">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3" />
-            </svg>
-          </div>
+          {/* Indikator scroll global dihapus dari sini */}
 
           <div className="absolute bottom-6 sm:bottom-8 left-0 right-0 z-30 flex justify-center space-x-2 sm:space-x-4">
             {safetyFactors.map((_, index) => (
