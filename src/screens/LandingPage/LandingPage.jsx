@@ -257,7 +257,7 @@ export const LandingPage = () => {
           <div className="relative z-20 text-left px-6 sm:px-16 lg:px-28 max-w-5xl flex flex-col items-start w-full">
             <div className="absolute inset-x-0 -top-8 -bottom-8 bg-[#0b3848] opacity-20 rounded-r-full blur-2xl -ml-10"></div>
             <h1 className="relative text-4xl sm:text-7xl lg:text-8xl font-display font-bold mb-4 sm:mb-6 leading-tight drop-shadow-lg">
-              Panduan <br/> Keselamatan <br/> Berkendara
+              Pandan <br/> Keselamatan <br/> Berkendara
             </h1>
             <p className="relative text-base sm:text-2xl text-white/90 max-w-2xl leading-relaxed drop-shadow-md">
               Jadilah pahlawan di jalan raya. Lindungi dirimu, hormati sesama, dan pahami ilmunya.
