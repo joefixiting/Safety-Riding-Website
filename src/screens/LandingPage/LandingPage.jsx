@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import jsPDF from "jspdf";
 
 // Import Gambar Anda di sini
 import BackgroundHero from '../../assets/images/bg1.png';
@@ -27,6 +28,12 @@ export const LandingPage = () => {
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [modalImage, setModalImage] = useState(null);
+
+  // TAMBAHAN: State untuk melacak apakah user sudah pernah menggeser slider
+  const [hasInteracted, setHasInteracted] = useState(false);
+  const [userName, setUserName] = useState("");
+  const [isQuizStarted, setIsQuizStarted] = useState(false);
+  const [isGeneratingCert, setIsGeneratingCert] = useState(false);
 
   // ================= DATA FAKTOR (Background & Judul) =================
   const safetyFactors = [
@@ -86,19 +93,97 @@ export const LandingPage = () => {
   ];
 
   // ================= FUNGSI HANDLER =================
-  const nextFactor = () => setCurrentFactor((prev) => (prev === safetyFactors.length - 1 ? 0 : prev + 1));
-  const prevFactor = () => setCurrentFactor((prev) => (prev === 0 ? safetyFactors.length - 1 : prev - 1));
+  const nextFactor = () => {
+    setHasInteracted(true);
+    setCurrentFactor((prev) => (prev === safetyFactors.length - 1 ? 0 : prev + 1));
+  };
+  
+  const prevFactor = () => {
+    setHasInteracted(true);
+    setCurrentFactor((prev) => (prev === 0 ? safetyFactors.length - 1 : prev - 1));
+  };
+
+  const startQuiz = (e) => {
+    e.preventDefault();
+    if (userName.trim().length > 2) {
+      setIsQuizStarted(true);
+    }
+  };
 
   const handleAnswer = (selectedIndex) => {
     if (selectedIndex === quizQuestions[currentQ].answer) setScore(score + 1);
-    if (currentQ < quizQuestions.length - 1) setCurrentQ(currentQ + 1);
-    else setShowResult(true);
+    
+    if (currentQ < quizQuestions.length - 1) {
+      setCurrentQ(currentQ + 1);
+    } else {
+      setShowResult(true);
+    }
   };
 
   const resetQuiz = () => {
     setCurrentQ(0);
     setScore(0);
     setShowResult(false);
+    // Tidak me-reset nama agar user tidak perlu mengetik ulang
+  };
+
+  // FUNGSI MEMBUAT PDF SERTIFIKAT
+  const generateCertificate = () => {
+    setIsGeneratingCert(true);
+    
+    setTimeout(() => {
+      // Membuat dokumen PDF (Landscape, format A4)
+      const doc = new jsPDF({
+        orientation: "landscape",
+        unit: "mm",
+        format: "a4"
+      });
+
+      // Menambahkan bingkai/border warna amber
+      doc.setDrawColor(251, 191, 36); // Warna Tailwind amber-400
+      doc.setLineWidth(5);
+      doc.rect(10, 10, 277, 190);
+      doc.setDrawColor(11, 56, 72); // Warna gelap utama
+      doc.setLineWidth(1);
+      doc.rect(15, 15, 267, 180);
+
+      // Teks Judul
+      doc.setTextColor(11, 56, 72);
+      doc.setFontSize(40);
+      doc.setFont("helvetica", "bold");
+      doc.text("SERTIFIKAT KELULUSAN", 148, 60, { align: "center" });
+
+      // Teks Pengantar
+      doc.setFontSize(16);
+      doc.setFont("helvetica", "normal");
+      doc.text("Diberikan dengan bangga kepada:", 148, 85, { align: "center" });
+
+      // Nama Pengguna
+      doc.setTextColor(251, 191, 36); // Amber
+      doc.setFontSize(36);
+      doc.setFont("helvetica", "bolditalic");
+      doc.text(userName.toUpperCase(), 148, 110, { align: "center" });
+
+      // Garis bawah nama
+      doc.setDrawColor(200, 200, 200);
+      doc.line(70, 115, 227, 115);
+
+      // Keterangan Kelulusan
+      doc.setTextColor(50, 50, 50);
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "normal");
+      const text = `Telah berhasil menyelesaikan dan meraih nilai sempurna (10/10) \npada Evaluasi Panduan Keselamatan Berkendara (Safety Riding). \nSemoga selalu menjadi pelopor keselamatan di jalan raya.`;
+      doc.text(text, 148, 135, { align: "center" });
+
+      // Tanggal & TTD
+      const today = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+      doc.setFontSize(12);
+      doc.text(`Tanggal Lulus: ${today}`, 148, 175, { align: "center" });
+
+      // Menyimpan file
+      doc.save(`Sertifikat_SafetyRiding_${userName.replace(/\s+/g, '_')}.pdf`);
+      setIsGeneratingCert(false);
+    }, 1000); // Jeda sedikit agar tombol terlihat bereaksi
   };
 
   useEffect(() => {
@@ -256,6 +341,15 @@ export const LandingPage = () => {
           <div className="absolute inset-0 bg-[#0b3848]/30 z-10"></div>
           <div className="relative z-20 text-left px-6 sm:px-16 lg:px-28 max-w-5xl flex flex-col items-start w-full">
             <div className="absolute inset-x-0 -top-8 -bottom-8 bg-[#0b3848] opacity-20 rounded-r-full blur-2xl -ml-10"></div>
+            
+            {/* === BADGE ESTIMASI WAKTU BACA DI SINI === */}
+            <div className="relative inline-flex items-center gap-2 px-4 py-2 mb-6 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-xs sm:text-sm font-semibold text-amber-400 shadow-lg animate-fade-in">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 sm:w-5 sm:h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              </svg>
+              Cukup baca 5 menit untuk siap jadi pahlawan di jalan raya!
+            </div>
+
             <h1 className="relative text-4xl sm:text-7xl lg:text-8xl font-display font-bold mb-4 sm:mb-6 leading-tight drop-shadow-lg">
               Panduan <br/> Keselamatan <br/> Berkendara
             </h1>
@@ -301,12 +395,30 @@ export const LandingPage = () => {
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-6 h-6 sm:w-12 sm:h-12"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
           </button>
 
-          <div className="relative z-20 w-full max-w-7xl mx-auto px-10 sm:px-16 flex flex-col items-center text-center mt-6 sm:mt-12">
+          <div className="relative z-20 w-full max-w-7xl mx-auto px-10 sm:px-16 flex flex-col items-center text-center mt-2 sm:mt-6">
+            
+            <h2 className="text-4xl sm:text-5xl lg:text-5xl font-display font-bold text-white mb-8 sm:mb-12 drop-shadow-lg">
+              Faktor-Faktor yang Berhubungan dengan Perilaku Safety Riding
+            </h2>
+
             <div className="inline-block px-4 sm:px-5 py-1 sm:py-2 mb-4 sm:mb-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs sm:text-base font-semibold tracking-widest uppercase shadow-md">
               Faktor {currentFactor + 1} dari {safetyFactors.length}
             </div>
             
-            <h3 className="text-3xl sm:text-5xl lg:text-6xl font-display font-bold mb-4 sm:mb-8 drop-shadow-xl text-amber-400">{safetyFactors[currentFactor].name}</h3>
+            <h3 className="text-3xl sm:text-5xl lg:text-6xl font-display font-bold mb-2 sm:mb-4 drop-shadow-xl text-amber-400">{safetyFactors[currentFactor].name}</h3>
+            
+            {/* === TEKS INSTRUKSI (Hanya muncul jika di faktor 1 dan belum pernah digeser) === */}
+            {currentFactor === 0 && !hasInteracted && (
+              <div className="flex items-center justify-center gap-2 mb-4 sm:mb-6 text-white/80 animate-pulse text-xs sm:text-sm bg-black/40 px-4 py-1.5 rounded-full backdrop-blur-sm border border-white/10">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-amber-400">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" /> 
+                </svg>
+                <span>Klik tanda panah untuk melihat faktor lain</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-amber-400">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                </svg>
+              </div>
+            )}
             
             <div className="w-full">
               {renderFactorContent()}
@@ -317,11 +429,16 @@ export const LandingPage = () => {
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-6 h-6 sm:w-12 sm:h-12"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
           </button>
 
-          {/* Indikator scroll global dihapus dari sini */}
-
           <div className="absolute bottom-6 sm:bottom-8 left-0 right-0 z-30 flex justify-center space-x-2 sm:space-x-4">
             {safetyFactors.map((_, index) => (
-              <button key={index} onClick={() => setCurrentFactor(index)} className={`h-2 sm:h-4 rounded-full transition-all duration-300 ${currentFactor === index ? 'bg-amber-400 w-6 sm:w-12' : 'bg-white/50 hover:bg-white w-2 sm:w-4'}`} />
+              <button 
+                key={index} 
+                onClick={() => {
+                  setCurrentFactor(index);
+                  setHasInteracted(true); // Memastikan teks juga hilang jika user mengklik titik di bawah
+                }} 
+                className={`h-2 sm:h-4 rounded-full transition-all duration-300 ${currentFactor === index ? 'bg-amber-400 w-6 sm:w-12' : 'bg-white/50 hover:bg-white w-2 sm:w-4'}`} 
+              />
             ))}
           </div>
         </section>
@@ -373,14 +490,43 @@ export const LandingPage = () => {
             <div className="h-screen w-full relative flex flex-col items-center justify-center px-4 shrink-0 z-20">
               <div className="text-center mb-6 sm:mb-8">
                 <h2 className="text-3xl sm:text-5xl font-display font-bold text-white drop-shadow-lg">Quiz Berkendara</h2>
-                <p className="text-white/80 mt-1 sm:mt-2 text-sm sm:text-lg">Yuk kita cek apakah kalian sudah cukup memahami isi dari website ini!</p>
+                <p className="text-white/80 mt-1 sm:mt-2 text-sm sm:text-lg">Jawab semua benar (10/10) untuk mendapatkan E-Sertifikat!</p>
               </div>
 
-              <div className="w-full max-w-3xl bg-black/50 border border-white/20 backdrop-blur-xl rounded-3xl p-5 sm:p-12 shadow-2xl">
-                {!showResult ? (
-                  <div className="animate-fade-in">
-                    <div className="flex justify-between text-amber-400 text-xs sm:text-sm font-bold mb-4 sm:mb-6 uppercase tracking-wider">
+              <div className="w-full max-w-3xl bg-black/50 border border-white/20 backdrop-blur-xl rounded-3xl p-5 sm:p-12 shadow-2xl min-h-[300px] flex flex-col justify-center">
+                
+                {/* STATE 1: BELUM MEMULAI KUIS (INPUT NAMA) */}
+                {!isQuizStarted && !showResult && (
+                  <form onSubmit={startQuiz} className="flex flex-col items-center animate-fade-in w-full max-w-md mx-auto">
+                    <div className="text-6xl mb-6">🏆</div>
+                    <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 text-center">Siap Menguji Pengetahuan Anda?</h3>
+                    <p className="text-sm text-white/60 mb-6 text-center">Masukkan nama lengkap Anda. Nama ini akan dicetak pada Sertifikat Kelulusan jika Anda berhasil menjawab semua soal dengan benar.</p>
+                    
+                    <input 
+                      type="text" 
+                      required
+                      placeholder="Masukkan nama lengkap Anda..." 
+                      value={userName}
+                      onChange={(e) => setUserName(e.target.value)}
+                      className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition-all text-center text-lg mb-6"
+                    />
+                    
+                    <button 
+                      type="submit"
+                      disabled={userName.trim().length < 3}
+                      className="w-full px-8 py-4 bg-amber-400 text-slate-900 disabled:opacity-50 disabled:cursor-not-allowed rounded-full font-bold hover:bg-amber-300 transition-colors shadow-lg shadow-amber-400/20 text-base sm:text-lg uppercase tracking-wide"
+                    >
+                      Mulai Quiz
+                    </button>
+                  </form>
+                )}
+
+                {/* STATE 2: KUIS BERLANGSUNG */}
+                {isQuizStarted && !showResult && (
+                  <div className="animate-fade-in w-full">
+                    <div className="flex justify-between items-center text-amber-400 text-xs sm:text-sm font-bold mb-4 sm:mb-6 uppercase tracking-wider">
                       <span>Pertanyaan {currentQ + 1} / 10</span>
+                      <span className="text-white/50 bg-white/10 px-3 py-1 rounded-full">{userName}</span>
                     </div>
                     <h3 className="text-lg sm:text-2xl font-bold text-white mb-6 sm:mb-8 leading-relaxed">
                       {quizQuestions[currentQ].q}
@@ -390,39 +536,70 @@ export const LandingPage = () => {
                         <button 
                           key={idx} 
                           onClick={() => handleAnswer(idx)}
-                          className="w-full text-left px-4 py-3 sm:px-6 sm:py-4 rounded-xl bg-white/10 hover:bg-amber-400 hover:text-slate-900 border border-white/10 transition-all font-sans text-sm sm:text-base text-white font-medium"
+                          className="w-full text-left px-4 py-3 sm:px-6 sm:py-4 rounded-xl bg-white/10 hover:bg-amber-400 hover:text-slate-900 border border-white/10 transition-all font-sans text-sm sm:text-base text-white font-medium group"
                         >
+                          <span className="inline-block w-6 h-6 rounded-full border border-current mr-3 text-center leading-5 text-sm group-hover:bg-slate-900 group-hover:text-amber-400">
+                            {String.fromCharCode(65 + idx)}
+                          </span>
                           {opt}
                         </button>
                       ))}
                     </div>
                   </div>
-                ) : (
-                  <div className="text-center animate-fade-in py-6 sm:py-8">
-                    <h3 className="text-xl sm:text-3xl font-bold text-white mb-4">Hasil Evaluasi Anda</h3>
-                    <div className="text-5xl sm:text-6xl font-display font-bold mb-6">
+                )}
+
+                {/* STATE 3: HASIL KUIS */}
+                {showResult && (
+                  <div className="text-center animate-fade-in py-2 sm:py-6 flex flex-col items-center">
+                    <h3 className="text-xl sm:text-3xl font-bold text-white mb-4">Hasil Evaluasi: <span className="text-amber-400">{userName}</span></h3>
+                    
+                    <div className="text-6xl sm:text-7xl font-display font-bold mb-6">
                       {score} <span className="text-2xl sm:text-3xl text-white/50">/ 10</span>
                     </div>
                     
-                    {score > 5 ? (
-                      <div className="inline-block px-6 py-2 sm:px-8 sm:py-3 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500 text-base sm:text-xl font-bold mb-6 sm:mb-8">
-                        ✅ STATUS: AMAN
-                      </div>
+                    {score === 10 ? (
+                      // LULUS SEMPURNA (10/10)
+                      <>
+                        <div className="inline-block px-6 py-2 sm:px-8 sm:py-3 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500 text-base sm:text-xl font-bold mb-4 shadow-[0_0_15px_rgba(16,185,129,0.3)] animate-pulse">
+                          🎉 LULUS! SANGAT AMAN
+                        </div>
+                        <p className="text-sm sm:text-base text-white/80 mb-8 max-w-md mx-auto">
+                          Sempurna! Anda memiliki pemahaman yang luar biasa tentang keselamatan berkendara. Unduh sertifikat kelulusan Anda di bawah ini.
+                        </p>
+                        <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
+                          <button 
+                            onClick={generateCertificate} 
+                            disabled={isGeneratingCert}
+                            className="px-6 py-3 sm:px-8 sm:py-4 bg-emerald-500 text-white rounded-full font-bold hover:bg-emerald-400 transition-colors shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2"
+                          >
+                            {isGeneratingCert ? (
+                              <span className="animate-spin text-xl">⏳</span>
+                            ) : (
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+                            )}
+                            {isGeneratingCert ? "Memproses..." : "Unduh Sertifikat PDF"}
+                          </button>
+                          <button onClick={() => { setIsQuizStarted(false); resetQuiz(); setUserName(""); }} className="px-6 py-3 sm:px-8 sm:py-4 bg-white/10 text-white rounded-full font-bold hover:bg-white/20 transition-colors">
+                            Selesai
+                          </button>
+                        </div>
+                      </>
                     ) : (
-                      <div className="inline-block px-6 py-2 sm:px-8 sm:py-3 rounded-full bg-red-500/20 text-red-400 border border-red-500 text-base sm:text-xl font-bold mb-6 sm:mb-8">
-                        ⚠️ STATUS: TIDAK AMAN
-                      </div>
+                      // TIDAK LULUS (< 10)
+                      <>
+                        <div className="inline-block px-6 py-2 sm:px-8 sm:py-3 rounded-full bg-red-500/20 text-red-500 border border-red-500 text-base sm:text-xl font-bold mb-4">
+                          {score === 0 ? "❌ SANGAT TIDAK AMAN" : "⚠️ TIDAK LULUS"}
+                        </div>
+                        <p className="text-sm sm:text-base text-white/80 mb-8 max-w-md mx-auto">
+                          {score === 0 
+                            ? "Sangat disayangkan, Anda gagal menjawab semua soal. Silakan baca materi kembali dari awal demi keselamatan Anda." 
+                            : "Pemahaman Anda masih kurang. Anda harus mendapatkan nilai sempurna (10) untuk mendapatkan sertifikat."}
+                        </p>
+                        <button onClick={resetQuiz} className="px-6 py-3 sm:px-8 sm:py-4 bg-amber-400 text-slate-900 rounded-full font-bold hover:bg-amber-300 transition-colors shadow-lg shadow-amber-400/20 w-full sm:w-auto">
+                          Ulangi Quiz
+                        </button>
+                      </>
                     )}
-                    
-                    <p className="text-sm sm:text-base text-white/80 mb-6 sm:mb-8 max-w-md mx-auto">
-                      {score > 5 
-                        ? "Luar biasa! Pemahaman Anda tentang keselamatan berkendara sangat baik. Pertahankan saat di jalan raya." 
-                        : "Pemahaman Anda masih kurang. Jangan ragu untuk membaca kembali panduan di atas demi keselamatan bersama."}
-                    </p>
-
-                    <button onClick={resetQuiz} className="px-6 py-3 sm:px-8 sm:py-4 bg-amber-400 text-slate-900 rounded-full font-bold hover:bg-amber-300 transition-colors shadow-lg shadow-amber-400/20 text-sm sm:text-base">
-                      Ulangi Quiz
-                    </button>
                   </div>
                 )}
               </div>
