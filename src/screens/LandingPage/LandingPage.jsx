@@ -558,7 +558,8 @@ export const LandingPage = () => {
                     </div>
                     
                     {score === 10 ? (
-                      // LULUS SEMPURNA (10/10)                      <>
+                      // LULUS SEMPURNA (10/10)
+                      <>
                         <div className="inline-block px-6 py-2 sm:px-8 sm:py-3 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500 text-base sm:text-xl font-bold mb-4 shadow-[0_0_15px_rgba(16,185,129,0.3)] animate-pulse">
                           🎉 LULUS! SANGAT AMAN
                         </div>
