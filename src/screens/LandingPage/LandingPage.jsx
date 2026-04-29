@@ -391,17 +391,21 @@ export const LandingPage = () => {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0b3848] via-[#0b3848]/80 to-[#0b3848]/50 z-10"></div>
 
+          {/* Judul Absolute di Atas agar Steady */}
+          <div className="absolute top-12 sm:top-24 w-full text-center z-20 px-4">
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-display font-bold text-white drop-shadow-lg">
+              Faktor-Faktor yang Berhubungan dengan Perilaku Safety Riding
+            </h2>
+          </div>
+
           <button onClick={prevFactor} className="absolute left-2 sm:left-6 z-30 p-2 sm:p-5 text-white hover:text-amber-400 transition-colors bg-black/20 hover:bg-black/50 rounded-full backdrop-blur-sm">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-6 h-6 sm:w-12 sm:h-12"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
           </button>
 
-          <div className="relative z-20 w-full max-w-7xl mx-auto px-10 sm:px-16 flex flex-col items-center text-center mt-2 sm:mt-6">
+          {/* Kontainer Utama Diubah margin-top nya */}
+          <div className="relative z-20 w-full max-w-7xl mx-auto px-10 sm:px-16 flex flex-col items-center text-center mt-20 sm:mt-16">
             
-            <h2 className="text-4xl sm:text-5xl lg:text-5xl font-display font-bold text-white mb-8 sm:mb-12 drop-shadow-lg">
-              Faktor-Faktor yang Berhubungan dengan Perilaku Safety Riding
-            </h2>
-
-            <div className="inline-block px-4 sm:px-5 py-1 sm:py-2 mb-4 sm:mb-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs sm:text-base font-semibold tracking-widest uppercase shadow-md">
+            <div className="inline-block px-4 sm:px-5 py-1 sm:py-2 mb-2 sm:mb-4 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs sm:text-base font-semibold tracking-widest uppercase shadow-md">
               Faktor {currentFactor + 1} dari {safetyFactors.length}
             </div>
             
@@ -409,7 +413,7 @@ export const LandingPage = () => {
             
             {/* === TEKS INSTRUKSI (Hanya muncul jika di faktor 1 dan belum pernah digeser) === */}
             {currentFactor === 0 && !hasInteracted && (
-              <div className="flex items-center justify-center gap-2 mb-4 sm:mb-6 text-white/80 animate-pulse text-xs sm:text-sm bg-black/40 px-4 py-1.5 rounded-full backdrop-blur-sm border border-white/10">
+              <div className="flex items-center justify-center gap-2 mb-2 sm:mb-4 text-white/80 animate-pulse text-xs sm:text-sm bg-black/40 px-4 py-1.5 rounded-full backdrop-blur-sm border border-white/10">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-amber-400">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" /> 
                 </svg>
@@ -435,7 +439,7 @@ export const LandingPage = () => {
                 key={index} 
                 onClick={() => {
                   setCurrentFactor(index);
-                  setHasInteracted(true); // Memastikan teks juga hilang jika user mengklik titik di bawah
+                  setHasInteracted(true); 
                 }} 
                 className={`h-2 sm:h-4 rounded-full transition-all duration-300 ${currentFactor === index ? 'bg-amber-400 w-6 sm:w-12' : 'bg-white/50 hover:bg-white w-2 sm:w-4'}`} 
               />
