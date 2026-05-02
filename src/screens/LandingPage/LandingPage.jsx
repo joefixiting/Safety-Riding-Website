@@ -80,15 +80,15 @@ export const LandingPage = () => {
 
   const quizQuestions = [
     { 
-      q: "Anda sedang berkendara dan melihat rambu berbentuk lingkaran berwarna dasar biru dengan gambar sepeda motor dan mobil di dalamnya, terpisah oleh garis lurus (rambu \"Jalur Campuran\"). Apa tindakan yang paling tepat untuk dilakukan sesuai rambu tersebut?", 
+      q: "Saat sedang mengantar penumpang, Anda melihat rambu berbentuk lingkaran biru dengan gambar panah putih yang menunjuk ke arah kiri (Rambu Perintah Mengikuti Arah Kiri). Apa yang harus Anda lakukan sebagai driver yang patuh aturan? ", 
       options: [
-        "Wajib berbagi lajur dengan hati-hati, karena jalur tersebut merupakan lajur campuran yang dapat dilewati oleh mobil dan sepeda motor.", 
-        "Dilarang melintas karena jalur tersebut hanya untuk pejalan kaki.", 
-        "Hanya sepeda motor yang boleh melintas di jalur tersebut.", 
-        "Kendaraan bermotor bebas melaju kencang karena tidak ada pejalan kaki.", 
-        "Menepi segera karena itu adalah tanda jalur darurat."
+        "Segera berbelok ke kanan jika merasa jalan di kiri sedang macet.", 
+        "Boleh lurus terus asalkan tidak ada petugas kepolisian yang berjaga.", 
+        "Wajib mengikuti lajur ke arah kiri sesuai instruksi rambu demi ketertiban dan keselamatan bersama. ", 
+        "Berhenti sejenak di bawah rambu tersebut untuk menunggu penumpang lain. ", 
+        "Menyalakan lampu hazard dan tetap melaju lurus dengan kecepatan tinggi."
       ], 
-      answer: 0 
+      answer: 2
     },
     { 
       q: "Menurut standar kelayakan kendaraan, jika lampu sein (rating) motor berkedip lebih cepat dari biasanya atau tidak menyala sama sekali, hal ini melanggar standar keselamatan karena...", 
