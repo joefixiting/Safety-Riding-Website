@@ -29,14 +29,18 @@ export const LandingPage = () => {
   const [showResult, setShowResult] = useState(false);
   const [modalImage, setModalImage] = useState(null);
 
-  // TAMBAHAN: State untuk melacak apakah user sudah pernah menggeser slider
+  // STATE untuk melacak apakah user sudah pernah menggeser slider
   const [hasInteracted, setHasInteracted] = useState(false);
+  
+  // STATE UNTUK KUIS & SERTIFIKAT
   const [userName, setUserName] = useState("");
   const [isQuizStarted, setIsQuizStarted] = useState(false);
   const [isGeneratingCert, setIsGeneratingCert] = useState(false);
 
   // ================= DATA FAKTOR (Background & Judul) =================
+  // Menambahkan slide intro di urutan pertama (id: 0)
   const safetyFactors = [
+    { id: 0, name: "Faktor-Faktor yang Berhubungan dengan Perilaku Safety Riding", image: BackgroundDefinisi, isIntro: true },
     { id: 1, name: "Jenis Kelamin", image: MentalImage },
     { id: 2, name: "Pengetahuan", image: KendaraanImage },
     { id: 3, name: "Pengalaman Kecelakaan", image: GearImage },
@@ -47,7 +51,7 @@ export const LandingPage = () => {
     { id: 8, name: "Dukungan Keluarga", image: JalanImage },
   ];
 
-  // Data Pembantu untuk Kondisi Kendaraan (Faktor 7)
+  // Data Pembantu untuk Kondisi Kendaraan
   const kondisiKendaraan = [
     { title: "1. Alat Kendali", points: ["Rem: Berfungsi baik, tidak blong, dan pakem.", "Kopling: Tidak terlalu keras/longgar, perpindahan halus.", "Gas: Kembali otomatis saat dilepas (tidak nyangkut)."] },
     { title: "2. Ban", points: ["Tidak gundul (masih memiliki alur/tapak).", "Tekanan angin sesuai standar pabrikan.", "Tidak retak, benjol, atau bocor.", "Seimbang depan dan belakang."] },
@@ -75,16 +79,116 @@ export const LandingPage = () => {
   ];
 
   const quizQuestions = [
-    { q: "Apa yang dimaksud dengan safety riding?", options: ["Cara mempercepat kendaraan", "Upaya meningkatkan keselamatan berkendara", "Cara menghemat bahan bakar"], answer: 1 },
-    { q: "Tujuan utama safety riding adalah…", options: ["Menambah kecepatan berkendara", "Mencegah kecelakaan lalu lintas", "Mengurangi kemacetan"], answer: 1 },
-    { q: "Siapa yang paling banyak terlibat kecelakaan menurut data?", options: ["Perempuan", "Laki-laki", "Anak-anak"], answer: 1 },
-    { q: "Salah satu teknik berkendara aman adalah…", options: ["Menambah kecepatan terus", "Menjaga jarak aman", "Mengabaikan rambu"], answer: 1 },
-    { q: "Mengapa penting memahami risiko di jalan?", options: ["Agar bisa ngebut", "Agar lebih waspada terhadap bahaya", "Agar cepat sampai"], answer: 1 },
-    { q: "Pengalaman kecelakaan dapat membuat driver…", options: ["Lebih ceroboh", "Lebih berhati-hati", "Tidak peduli"], answer: 1 },
-    { q: "Manfaat mengikuti training berkendara adalah…", options: ["Menambah risiko kecelakaan", "Mengurangi angka kecelakaan", "Membuat berkendara lebih cepat"], answer: 1 },
-    { q: "Motivasi tinggi pada driver akan membuat…", options: ["Mengabaikan aturan", "Lebih disiplin dalam berkendara aman", "Berkendara sembarangan"], answer: 1 },
-    { q: "Contoh APD saat berkendara adalah…", options: ["Helm dan sepatu", "Sandal dan topi", "Kacamata saja"], answer: 0 },
-    { q: "Dukungan keluarga dalam safety riding berupa…", options: ["Membiarkan berkendara bebas", "Mengingatkan untuk berkendara aman", "Menyuruh ngebut"], answer: 1 },
+    { 
+      q: "Anda sedang berkendara dan melihat rambu berbentuk lingkaran berwarna dasar biru dengan gambar sepeda motor dan mobil di dalamnya, terpisah oleh garis lurus (rambu \"Jalur Campuran\"). Apa tindakan yang paling tepat untuk dilakukan sesuai rambu tersebut?", 
+      options: [
+        "Wajib berbagi lajur dengan hati-hati, karena jalur tersebut merupakan lajur campuran yang dapat dilewati oleh mobil dan sepeda motor.", 
+        "Dilarang melintas karena jalur tersebut hanya untuk pejalan kaki.", 
+        "Hanya sepeda motor yang boleh melintas di jalur tersebut.", 
+        "Kendaraan bermotor bebas melaju kencang karena tidak ada pejalan kaki.", 
+        "Menepi segera karena itu adalah tanda jalur darurat."
+      ], 
+      answer: 0 
+    },
+    { 
+      q: "Menurut standar kelayakan kendaraan, jika lampu sein (rating) motor berkedip lebih cepat dari biasanya atau tidak menyala sama sekali, hal ini melanggar standar keselamatan karena...", 
+      options: [
+        "Warna lampu sein boleh diganti menjadi putih atau biru asalkan terang.", 
+        "Lampu sein yang berkedip cepat menandakan aki dalam kondisi sangat baik.", 
+        "Hanya wajib menggunakan lampu sein saat malam hari.", 
+        "Lampu sein wajib berkedip stabil dan berwarna kuning tua sebagai alat komunikasi utama dengan pengendara lain.", 
+        "Kedipan lampu sein tidak berpengaruh selama klakson berfungsi."
+      ], 
+      answer: 3 
+    },
+    { 
+      q: "Seorang driver antar jemput bernama Budi merasa enggan memakai helm saat menjemput penumpang di area perumahan karena jaraknya dekat. Namun, setelah ditegur oleh penumpangnya dan mengingat keselamatan dirinya, Budi akhirnya memakai helm. Faktor apa yang sedang memengaruhi Budi?", 
+      options: [
+        "Pengalaman Kecelakaan", 
+        "Faktor Jenis Kelamin", 
+        "Dukungan Keluarga secara langsung", 
+        "Training Berkendara", 
+        "Motivasi internal yang sebelumnya rendah, namun meningkat karena kesadaran akan tanggung jawab terhadap keselamatan."
+      ], 
+      answer: 4 
+    },
+    { 
+      q: "Anda akan melakukan perjalanan panjang mengantar penumpang di siang hari. Berdasarkan materi, selain helm SNI dan membawa jas hujan, pakaian pelindung apa yang wajib digunakan dan mengapa?", 
+      options: [
+        "Memakai kaus tipis agar tidak kepanasan.", 
+        "Memakai sandal jepit agar kaki lebih leluasa saat harus mengerem mendadak.", 
+        "Memakai jaket tebal tertutup untuk melindungi tubuh dari gesekan dan cuaca, serta sepatu yang menutupi kaki untuk melindungi dari benturan jalan.", 
+        "Hanya memakai helm saja sudah cukup karena memenuhi aturan hukum dasar.", 
+        "Memakai seragam bebas asalkan membawa alat perkakas darurat."
+      ], 
+      answer: 2 
+    },
+    { 
+      q: "Mengapa pengalaman kecelakaan di masa lalu dapat memengaruhi tingkat keselamatan berkendara seorang driver saat ini?", 
+      options: [
+        "Karena pengalaman tersebut dapat menimbulkan kesadaran dan pemahaman baru tentang risiko di jalan, sehingga driver cenderung memiliki kehati-hatian yang lebih tinggi.", 
+        "Karena driver tersebut akan dilarang mengemudi lagi selamanya.", 
+        "Karena driver akan menjadi lebih agresif di jalan raya untuk menebus kesalahan sebelumnya.", 
+        "Karena pihak asuransi akan memantau driver tersebut setiap hari.", 
+        "Karena driver tersebut otomatis akan selalu menghindari jalan raya besar."
+      ], 
+      answer: 0 
+    },
+    { 
+      q: "Saat melakukan pengecekan motor sebelum bekerja, Anda menemukan bahwa alur ban depan sudah gundul dan rantai motor mengeluarkan suara berisik yang berlebihan. Apa tindakan yang harus dilakukan?", 
+      options: [
+        "Menambahkan oli ke dalam mesin agar suara berisik rantai hilang.", 
+        "Tetap bekerja karena ban gundul justru membuat laju motor lebih cepat di jalan aspal kering.", 
+        "Mengabaikannya asalkan rem dan lampu sein masih berfungsi normal.", 
+        "Cukup membawa alat perkakas darurat di jok motor tanpa harus memperbaiki komponen.", 
+        "Menunda pekerjaan dan segera mengganti ban yang tidak botak serta melumasi/menyetel tegangan rantai agar tidak membahayakan keselamatan."
+      ], 
+      answer: 4 
+    },
+    { 
+      q: "Selain APD fisik, ada kelengkapan administratif (persuratan) yang sifatnya wajib dibawa saat berkendara sebagai bukti legalitas pengendara. Kelengkapan tersebut adalah...", 
+      options: [
+        "Kartu Tanda Penduduk (KTP) dan Kartu Keluarga (KK).", 
+        "Surat Izin Mengemudi (SIM) dan Surat Tanda Nomor Kendaraan (STNK).", 
+        "Surat Izin Mengemudi (SIM) dan Bukti Pembayaran Asuransi.", 
+        "Surat Keterangan Catatan Kepolisian (SKCK).", 
+        "Sertifikat Training Berkendara Aman."
+      ], 
+      answer: 1 
+    },
+    { 
+      q: "Andi adalah seorang driver yang selalu ditelepon oleh ibunya setiap pagi untuk mengingatkan agar ia tidak mengebut dan selalu memakai helm pelindung. Secara bertahap, Andi menjadi driver yang sangat tertib. Bagaimana dukungan keluarga membentuk perilaku ini?", 
+      options: [
+        "Keluarga memaksa Andi dengan ancaman hukuman finansial.", 
+        "Keluarga mendaftarkan Andi ke sekolah balap motor resmi.", 
+        "Dukungan keluarga memberikan perhatian dan pengawasan yang meningkatkan kesadaran serta rasa tanggung jawab Andi untuk selalu mengutamakan keselamatan.", 
+        "Dukungan keluarga membuat Andi merasa terlalu diawasi sehingga ia tidak fokus bekerja.", 
+        "Keluarga menjamin bahwa Andi tidak akan pernah mengalami kecelakaan."
+      ], 
+      answer: 2 
+    },
+    { 
+      q: "Apa tujuan utama bagi seorang driver untuk memahami dan memiliki pengetahuan mengenai berbagai risiko bahaya di jalan (seperti jalan berlubang, cuaca, atau pengendara tidak tertib)?", 
+      options: [
+        "Agar driver bisa menuntut pihak pemerintah jika terjadi kerusakan jalan.", 
+        "Agar driver dapat berkendara secara lebih cepat tanpa ragu.", 
+        "Agar driver bisa memilih orderan hanya di jalan yang mulus dan lurus.", 
+        "Agar driver menjadi lebih waspada, bisa berkendara secara defensif, dan mampu mengantisipasi kemungkinan terjadinya kecelakaan.", 
+        "Agar driver bisa memarahi pengendara lain yang melakukan kesalahan."
+      ], 
+      answer: 3 
+    },
+    { 
+      q: "Saat mengendarai motor berjenis manual, Anda merasakan bahwa putaran gas (throttle) tidak kembali otomatis saat dilepas (tersangkut) dan tuas rem terasa sangat keras. Apa dampaknya jika hal ini tidak segera ditangani?", 
+      options: [
+        "Motor akan menjadi lebih irit bensin karena putaran gas tertahan.", 
+        "Hal ini sangat berbahaya karena motor bisa melaju tidak terkendali (gas nyangkut) dan rem yang keras/tidak pakem akan menyebabkan gagal berhenti saat darurat.", 
+        "Kecepatan motor menjadi lebih stabil saat berada di jalan tol.", 
+        "Tidak berdampak besar asalkan pengemudi pandai memainkan tuas kopling.", 
+        "Menandakan bahwa tali gas dan kanvas rem dalam kondisi baru dan masih kaku."
+      ], 
+      answer: 1 
+    }
   ];
 
   const socialMediaLinks = [
@@ -124,66 +228,55 @@ export const LandingPage = () => {
     setCurrentQ(0);
     setScore(0);
     setShowResult(false);
-    // Tidak me-reset nama agar user tidak perlu mengetik ulang
   };
 
-  // FUNGSI MEMBUAT PDF SERTIFIKAT
   const generateCertificate = () => {
     setIsGeneratingCert(true);
     
     setTimeout(() => {
-      // Membuat dokumen PDF (Landscape, format A4)
       const doc = new jsPDF({
         orientation: "landscape",
         unit: "mm",
         format: "a4"
       });
 
-      // Menambahkan bingkai/border warna amber
-      doc.setDrawColor(251, 191, 36); // Warna Tailwind amber-400
+      doc.setDrawColor(251, 191, 36); 
       doc.setLineWidth(5);
       doc.rect(10, 10, 277, 190);
-      doc.setDrawColor(11, 56, 72); // Warna gelap utama
+      doc.setDrawColor(11, 56, 72); 
       doc.setLineWidth(1);
       doc.rect(15, 15, 267, 180);
 
-      // Teks Judul
       doc.setTextColor(11, 56, 72);
       doc.setFontSize(40);
       doc.setFont("helvetica", "bold");
       doc.text("SERTIFIKAT KELULUSAN", 148, 60, { align: "center" });
 
-      // Teks Pengantar
       doc.setFontSize(16);
       doc.setFont("helvetica", "normal");
       doc.text("Diberikan dengan bangga kepada:", 148, 85, { align: "center" });
 
-      // Nama Pengguna
-      doc.setTextColor(251, 191, 36); // Amber
+      doc.setTextColor(251, 191, 36); 
       doc.setFontSize(36);
       doc.setFont("helvetica", "bolditalic");
       doc.text(userName.toUpperCase(), 148, 110, { align: "center" });
 
-      // Garis bawah nama
       doc.setDrawColor(200, 200, 200);
       doc.line(70, 115, 227, 115);
 
-      // Keterangan Kelulusan
       doc.setTextColor(50, 50, 50);
       doc.setFontSize(14);
       doc.setFont("helvetica", "normal");
       const text = `Telah berhasil menyelesaikan dan meraih nilai sempurna (10/10) \npada Evaluasi Panduan Keselamatan Berkendara (Safety Riding). \nSemoga selalu menjadi pelopor keselamatan di jalan raya.`;
       doc.text(text, 148, 135, { align: "center" });
 
-      // Tanggal & TTD
       const today = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
       doc.setFontSize(12);
       doc.text(`Tanggal Lulus: ${today}`, 148, 175, { align: "center" });
 
-      // Menyimpan file
       doc.save(`Sertifikat_SafetyRiding_${userName.replace(/\s+/g, '_')}.pdf`);
       setIsGeneratingCert(false);
-    }, 1000); // Jeda sedikit agar tombol terlihat bereaksi
+    }, 1000); 
   };
 
   useEffect(() => {
@@ -192,16 +285,19 @@ export const LandingPage = () => {
     return () => { document.body.style.overflow = "auto"; };
   }, []);
 
-// ================= RENDER KONTEN FAKTOR DINAMIS =================
+  // ================= RENDER KONTEN FAKTOR DINAMIS =================
   const renderFactorContent = () => {
     switch(currentFactor) {
       case 0:
+        // Slide 1 adalah Intro, tidak ada konten tambahan
+        return null;
+      case 1:
         return (
           <p className="text-base sm:text-xl lg:text-2xl text-white/90 font-sans leading-relaxed text-justify drop-shadow-md">
             Menurut data Pusat Informasi Kriminal Nasional (Pusiknas Bareskim Polri) 2025, jumlah kecelakaan lalu lintas di Indonesia saat ini mencapai 65.355 dimana jumlah pengemudi yang menggunakan sepeda motor mencapai 665.709 dari 872.135 pengemudi atau dapat dikatakan bahwa sepeda motor menjadi penyumbang tertinggi dari angka kecelakaan lalu lintas. Dari total pengemudi tersebut, 75% merupakan laki-laki dan 19% merupakan perempuan. Hal ini menunjukkan bahwa laki-laki menunjukkan kecenderungan lebih tinggi untuk terlibat dalam kecelakaan lalu lintas apabila dibandingkan dengan perempuan.
           </p>
         );
-      case 1:
+      case 2:
         return (
           <div className="relative w-full flex flex-col items-center">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-8 w-full text-left mt-4 max-h-[55vh] md:max-h-[60vh] overflow-y-auto hide-scrollbar pb-4 px-2">
@@ -239,13 +335,13 @@ export const LandingPage = () => {
             </div>
           </div>
         );
-      case 2:
+      case 3:
         return (
           <p className="text-base sm:text-xl lg:text-2xl text-white/90 font-sans leading-relaxed text-justify drop-shadow-md">
             Dalam konteks keselamatan berkendara, pengalaman kecelakaan menjadi salah satu sumber pembelajaran yang penting bagi seorang pengemudi. Pengalaman tersebut dapat menimbulkan kesadaran dan pemahaman baru tentang risiko di jalan serta pentingnya mematuhi aturan keselamatan. Pengemudi yang pernah mengalami kecelakaan cenderung memiliki tingkat kehati-hatian lebih tinggi dan memperhatikan faktor keselamatan dalam berkendara.
           </p>
         );
-      case 3:
+      case 4:
         return (
           <div className="text-left font-sans text-white/90 drop-shadow-md space-y-4 sm:space-y-6">
             <p className="text-base sm:text-xl lg:text-2xl text-justify leading-relaxed">Salah satu upaya yang dilakukan untuk meningkatkan awareness pengemudi yaitu dengan mengikuti pelatihan atau training berkendara aman. Manfaat dari mengikuti training berkendara aman yaitu:</p>
@@ -255,13 +351,13 @@ export const LandingPage = () => {
             </div>
           </div>
         );
-      case 4:
+      case 5:
         return (
           <p className="text-base sm:text-xl lg:text-2xl text-white/90 font-sans leading-relaxed text-justify drop-shadow-md">
             Motivasi merupakan dorongan dari dalam diri seseorang yang memengaruhi sikap dan perilaku dalam berkendara. Dalam konteks safety riding, motivasi berperan penting dalam menentukan sejauh mana driver memiliki keinginan untuk berkendara secara aman dan mematuhi aturan lalu lintas. Driver dengan motivasi tinggi cenderung lebih disiplin, didasari kesadaran pentingnya keselamatan diri dan tanggung jawab terhadap penumpang. Sebaliknya, motivasi rendah dapat menyebabkan pengabaian keselamatan.
           </p>
         );
-      case 5:
+      case 6:
         return (
           <div className="flex flex-col items-center justify-center w-full">
             <p className="text-base sm:text-xl lg:text-2xl text-white/90 font-sans leading-relaxed text-justify drop-shadow-md mb-6 sm:mb-8">
@@ -275,7 +371,7 @@ export const LandingPage = () => {
             </div>
           </div>
         );
-      case 6:
+      case 7:
         return (
           <div className="w-full text-left flex flex-col items-center">
             <p className="text-xs sm:text-lg text-white/80 mb-4 sm:mb-6 text-center px-4 w-full">Sesuai dengan UU No. 22 Tahun 2009 dan PP No. 55 Tahun 2012 tentang Kendaraan.</p>
@@ -300,7 +396,7 @@ export const LandingPage = () => {
             </div>
           </div>
         );
-      case 7:
+      case 8:
         return (
           <p className="text-base sm:text-xl lg:text-2xl text-white/90 font-sans leading-relaxed text-justify drop-shadow-md">
             Dukungan keluarga merupakan salah satu faktor eksternal yang dapat memengaruhi perilaku seseorang dalam berkendara. Dukungan ini dapat berupa perhatian, pengawasan, serta pengingat untuk selalu mengutamakan keselamatan. Adanya dukungan keluarga meningkatkan kesadaran dan rasa tanggung jawab driver, karena merasa diperhatikan. Kurangnya dukungan dapat membuat individu mengabaikan aspek keselamatan. Oleh karena itu, peran keluarga sangat penting dalam membentuk perilaku berkendara yang aman.
@@ -381,7 +477,7 @@ export const LandingPage = () => {
           </div>
         </section>
 
-        {/* ================= SECTION 3: 8 FAKTOR ================= */}
+        {/* ================= SECTION 3: 9 FAKTOR (1 Intro + 8 Faktor) ================= */}
         <section className="h-screen w-full snap-start snap-always relative isolate flex items-center justify-center overflow-hidden shrink-0">
           <img 
             key={safetyFactors[currentFactor].id}
@@ -391,33 +487,31 @@ export const LandingPage = () => {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0b3848] via-[#0b3848]/80 to-[#0b3848]/50 z-10"></div>
 
-          {/* Judul Absolute di Atas agar Steady */}
-          <div className="absolute top-12 sm:top-24 w-full text-center z-20 px-4">
-            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-display font-bold text-white drop-shadow-lg">
-              Faktor-Faktor yang Berhubungan dengan Perilaku Safety Riding
-            </h2>
-          </div>
-
           <button onClick={prevFactor} className="absolute left-2 sm:left-6 z-30 p-2 sm:p-5 text-white hover:text-amber-400 transition-colors bg-black/20 hover:bg-black/50 rounded-full backdrop-blur-sm">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-6 h-6 sm:w-12 sm:h-12"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
           </button>
 
-          {/* Kontainer Utama Diubah margin-top nya */}
-          <div className="relative z-20 w-full max-w-7xl mx-auto px-10 sm:px-16 flex flex-col items-center text-center mt-20 sm:mt-16">
+          <div className="relative z-20 w-full max-w-7xl mx-auto px-10 sm:px-16 flex flex-col items-center text-center mt-2 sm:mt-6">
             
-            <div className="inline-block px-4 sm:px-5 py-1 sm:py-2 mb-2 sm:mb-4 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs sm:text-base font-semibold tracking-widest uppercase shadow-md">
-              Faktor {currentFactor + 1} dari {safetyFactors.length}
-            </div>
+            {/* Pill "Faktor X dari 8" - Disembunyikan di slide pertama (Intro) */}
+            {!safetyFactors[currentFactor].isIntro && (
+              <div className="inline-block px-4 sm:px-5 py-1 sm:py-2 mb-2 sm:mb-4 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs sm:text-base font-semibold tracking-widest uppercase shadow-md">
+                Faktor {currentFactor} dari {safetyFactors.length - 1}
+              </div>
+            )}
             
-            <h3 className="text-3xl sm:text-5xl lg:text-6xl font-display font-bold mb-2 sm:mb-4 drop-shadow-xl text-amber-400">{safetyFactors[currentFactor].name}</h3>
+            {/* Judul Faktor atau Judul Utama di Slide 1 */}
+            <h3 className={`font-display font-bold drop-shadow-xl ${safetyFactors[currentFactor].isIntro ? 'text-4xl sm:text-6xl lg:text-7xl text-white mb-8 sm:mb-12 max-w-4xl leading-tight' : 'text-3xl sm:text-5xl lg:text-6xl text-amber-400 mb-2 sm:mb-4'}`}>
+              {safetyFactors[currentFactor].name}
+            </h3>
             
             {/* === TEKS INSTRUKSI (Hanya muncul jika di faktor 1 dan belum pernah digeser) === */}
             {currentFactor === 0 && !hasInteracted && (
-              <div className="flex items-center justify-center gap-2 mb-2 sm:mb-4 text-white/80 animate-pulse text-xs sm:text-sm bg-black/40 px-4 py-1.5 rounded-full backdrop-blur-sm border border-white/10">
+              <div className="flex items-center justify-center gap-2 mb-2 sm:mb-4 text-white/80 animate-pulse text-xs sm:text-sm bg-black/40 px-4 py-2 rounded-full backdrop-blur-sm border border-white/10 mt-4">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-amber-400">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" /> 
                 </svg>
-                <span>Klik tanda panah untuk melihat faktor lain</span>
+                <span>Klik tanda panah untuk melihat faktor-faktor</span>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-amber-400">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
                 </svg>
@@ -483,130 +577,255 @@ export const LandingPage = () => {
           </div>
         </section>
 
-        {/* ================= SECTION 5: QUIZ & FOOTER ================= */}
+         {/* ================= SECTION 5: QUIZ & FOOTER ================= */}
+
         <section className="h-screen w-full snap-start snap-always overflow-y-auto overflow-x-hidden hide-scrollbar scroll-smooth relative">
+
           <div className="flex flex-col w-full min-h-screen relative isolate">
-            
+
+           
+
             <img className="absolute inset-0 w-full h-full object-cover object-[80%_center] md:object-center z-0 fixed" alt="Quiz Background" src={BgQuiz} />
+
             <div className="absolute inset-0 bg-[#051e27]/80 z-10 fixed"></div>
 
+
+
             {/* --- QUIZ AREA --- */}
+
             <div className="h-screen w-full relative flex flex-col items-center justify-center px-4 shrink-0 z-20">
+
               <div className="text-center mb-6 sm:mb-8">
+
                 <h2 className="text-3xl sm:text-5xl font-display font-bold text-white drop-shadow-lg">Quiz Berkendara</h2>
+
                 <p className="text-white/80 mt-1 sm:mt-2 text-sm sm:text-lg">Jawab semua benar (10/10) untuk mendapatkan E-Sertifikat!</p>
+
               </div>
+
+
 
               <div className="w-full max-w-3xl bg-black/50 border border-white/20 backdrop-blur-xl rounded-3xl p-5 sm:p-12 shadow-2xl min-h-[300px] flex flex-col justify-center">
-                
+
+               
+
                 {/* STATE 1: BELUM MEMULAI KUIS (INPUT NAMA) */}
+
                 {!isQuizStarted && !showResult && (
+
                   <form onSubmit={startQuiz} className="flex flex-col items-center animate-fade-in w-full max-w-md mx-auto">
+
                     <div className="text-6xl mb-6">🏆</div>
+
                     <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 text-center">Siap Menguji Pengetahuan Anda?</h3>
+
                     <p className="text-sm text-white/60 mb-6 text-center">Masukkan nama lengkap Anda. Nama ini akan dicetak pada Sertifikat Kelulusan jika Anda berhasil menjawab semua soal dengan benar.</p>
-                    
-                    <input 
-                      type="text" 
+
+                   
+
+                    <input
+
+                      type="text"
+
                       required
-                      placeholder="Masukkan nama lengkap Anda..." 
+
+                      placeholder="Masukkan nama lengkap Anda..."
+
                       value={userName}
+
                       onChange={(e) => setUserName(e.target.value)}
+
                       className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition-all text-center text-lg mb-6"
+
                     />
-                    
-                    <button 
+
+                   
+
+                    <button
+
                       type="submit"
+
                       disabled={userName.trim().length < 3}
+
                       className="w-full px-8 py-4 bg-amber-400 text-slate-900 disabled:opacity-50 disabled:cursor-not-allowed rounded-full font-bold hover:bg-amber-300 transition-colors shadow-lg shadow-amber-400/20 text-base sm:text-lg uppercase tracking-wide"
+
                     >
+
                       Mulai Quiz
+
                     </button>
+
                   </form>
+
                 )}
+
+
 
                 {/* STATE 2: KUIS BERLANGSUNG */}
+
                 {isQuizStarted && !showResult && (
+
                   <div className="animate-fade-in w-full">
+
                     <div className="flex justify-between items-center text-amber-400 text-xs sm:text-sm font-bold mb-4 sm:mb-6 uppercase tracking-wider">
+
                       <span>Pertanyaan {currentQ + 1} / 10</span>
+
                       <span className="text-white/50 bg-white/10 px-3 py-1 rounded-full">{userName}</span>
+
                     </div>
+
                     <h3 className="text-lg sm:text-2xl font-bold text-white mb-6 sm:mb-8 leading-relaxed">
+
                       {quizQuestions[currentQ].q}
+
                     </h3>
+
                     <div className="flex flex-col space-y-3 sm:space-y-4">
+
                       {quizQuestions[currentQ].options.map((opt, idx) => (
-                        <button 
-                          key={idx} 
+
+                        <button
+
+                          key={idx}
+
                           onClick={() => handleAnswer(idx)}
+
                           className="w-full text-left px-4 py-3 sm:px-6 sm:py-4 rounded-xl bg-white/10 hover:bg-amber-400 hover:text-slate-900 border border-white/10 transition-all font-sans text-sm sm:text-base text-white font-medium group"
+
                         >
+
                           <span className="inline-block w-6 h-6 rounded-full border border-current mr-3 text-center leading-5 text-sm group-hover:bg-slate-900 group-hover:text-amber-400">
+
                             {String.fromCharCode(65 + idx)}
+
                           </span>
+
                           {opt}
+
                         </button>
+
                       ))}
+
                     </div>
+
                   </div>
+
                 )}
 
+
+
                 {/* STATE 3: HASIL KUIS */}
+
                 {showResult && (
+
                   <div className="text-center animate-fade-in py-2 sm:py-6 flex flex-col items-center">
+
                     <h3 className="text-xl sm:text-3xl font-bold text-white mb-4">Hasil Evaluasi: <span className="text-amber-400">{userName}</span></h3>
-                    
+
+                   
+
                     <div className="text-6xl sm:text-7xl font-display font-bold mb-6">
+
                       {score} <span className="text-2xl sm:text-3xl text-white/50">/ 10</span>
+
                     </div>
-                    
+
+                   
+
                     {score === 10 ? (
+
                       // LULUS SEMPURNA (10/10)
+
                       <>
+
                         <div className="inline-block px-6 py-2 sm:px-8 sm:py-3 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500 text-base sm:text-xl font-bold mb-4 shadow-[0_0_15px_rgba(16,185,129,0.3)] animate-pulse">
+
                           🎉 LULUS! SANGAT AMAN
+
                         </div>
+
                         <p className="text-sm sm:text-base text-white/80 mb-8 max-w-md mx-auto">
+
                           Sempurna! Anda memiliki pemahaman yang luar biasa tentang keselamatan berkendara. Unduh sertifikat kelulusan Anda di bawah ini.
+
                         </p>
+
                         <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
-                          <button 
-                            onClick={generateCertificate} 
+
+                          <button
+
+                            onClick={generateCertificate}
+
                             disabled={isGeneratingCert}
+
                             className="px-6 py-3 sm:px-8 sm:py-4 bg-emerald-500 text-white rounded-full font-bold hover:bg-emerald-400 transition-colors shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2"
+
                           >
+
                             {isGeneratingCert ? (
+
                               <span className="animate-spin text-xl">⏳</span>
+
                             ) : (
+
                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+
                             )}
+
                             {isGeneratingCert ? "Memproses..." : "Unduh Sertifikat PDF"}
+
                           </button>
+
                           <button onClick={() => { setIsQuizStarted(false); resetQuiz(); setUserName(""); }} className="px-6 py-3 sm:px-8 sm:py-4 bg-white/10 text-white rounded-full font-bold hover:bg-white/20 transition-colors">
+
                             Selesai
+
                           </button>
+
                         </div>
+
                       </>
+
                     ) : (
+
                       // TIDAK LULUS (< 10)
+
                       <>
+
                         <div className="inline-block px-6 py-2 sm:px-8 sm:py-3 rounded-full bg-red-500/20 text-red-500 border border-red-500 text-base sm:text-xl font-bold mb-4">
+
                           {score === 0 ? "❌ SANGAT TIDAK AMAN" : "⚠️ TIDAK LULUS"}
+
                         </div>
+
                         <p className="text-sm sm:text-base text-white/80 mb-8 max-w-md mx-auto">
-                          {score === 0 
-                            ? "Sangat disayangkan, Anda gagal menjawab semua soal. Silakan baca materi kembali dari awal demi keselamatan Anda." 
+
+                          {score === 0
+
+                            ? "Sangat disayangkan, Anda gagal menjawab semua soal. Silakan baca materi kembali dari awal demi keselamatan Anda."
+
                             : "Pemahaman Anda masih kurang. Anda harus mendapatkan nilai sempurna (10) untuk mendapatkan sertifikat."}
+
                         </p>
+
                         <button onClick={resetQuiz} className="px-6 py-3 sm:px-8 sm:py-4 bg-amber-400 text-slate-900 rounded-full font-bold hover:bg-amber-300 transition-colors shadow-lg shadow-amber-400/20 w-full sm:w-auto">
+
                           Ulangi Quiz
+
                         </button>
+
                       </>
+
                     )}
+
                   </div>
+
                 )}
+
               </div>
+
+
 
               {/* === INDIKATOR SCROLL INFO DI BAWAH QUIZ === */}
               <div className="absolute bottom-4 left-0 right-0 z-30 flex flex-col items-center justify-center text-white/60 text-[10px] sm:text-sm animate-bounce cursor-default">
