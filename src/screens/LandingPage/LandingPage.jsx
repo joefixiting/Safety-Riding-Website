@@ -375,7 +375,7 @@ export const LandingPage = () => {
         return (
           <div className="w-full text-left flex flex-col items-center">
             <p className="text-xs sm:text-lg text-white/80 mb-4 sm:mb-6 text-center px-4 w-full">Sesuai dengan UU No. 22 Tahun 2009 dan PP No. 55 Tahun 2012 tentang Kendaraan.</p>
-            <div className="flex flex-wrap justify-center gap-3 sm:gap-6 max-h-[45vh] sm:max-h-[55vh] overflow-y-auto hide-scrollbar pb-4 px-1 sm:px-2 w-full">
+            <div className="flex flex-wrap justify-center gap-3 sm:gap-6 max-h-[45vh] sm:max-h-[50vh] overflow-y-auto hide-scrollbar pb-4 px-1 sm:px-2 w-full">
               {kondisiKendaraan.map((item, idx) => (
                 <div key={idx} className="bg-black/50 border border-white/20 p-4 sm:p-6 rounded-2xl w-full sm:w-[46%] lg:w-[30%] backdrop-blur-md shadow-xl">
                   <h4 className="font-bold text-amber-400 text-sm sm:text-lg mb-2 sm:mb-4">{item.title}</h4>
@@ -477,7 +477,7 @@ export const LandingPage = () => {
           </div>
         </section>
 
-        {/* ================= SECTION 3: 9 FAKTOR (1 Intro + 8 Faktor) ================= */}
+        {/* ================= SECTION 3: 9 FAKTOR ================= */}
         <section className="h-screen w-full snap-start snap-always relative isolate flex items-center justify-center overflow-hidden shrink-0">
           <img 
             key={safetyFactors[currentFactor].id}
@@ -493,14 +493,12 @@ export const LandingPage = () => {
 
           <div className="relative z-20 w-full max-w-7xl mx-auto px-10 sm:px-16 flex flex-col items-center text-center mt-2 sm:mt-6">
             
-            {/* Pill "Faktor X dari 8" - Disembunyikan di slide pertama (Intro) */}
             {!safetyFactors[currentFactor].isIntro && (
               <div className="inline-block px-4 sm:px-5 py-1 sm:py-2 mb-2 sm:mb-4 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs sm:text-base font-semibold tracking-widest uppercase shadow-md">
                 Faktor {currentFactor} dari {safetyFactors.length - 1}
               </div>
             )}
             
-            {/* Judul Faktor atau Judul Utama di Slide 1 */}
             <h3 className={`font-display font-bold drop-shadow-xl ${safetyFactors[currentFactor].isIntro ? 'text-4xl sm:text-6xl lg:text-7xl text-white mb-8 sm:mb-12 max-w-4xl leading-tight' : 'text-3xl sm:text-5xl lg:text-6xl text-amber-400 mb-2 sm:mb-4'}`}>
               {safetyFactors[currentFactor].name}
             </h3>
@@ -577,263 +575,139 @@ export const LandingPage = () => {
           </div>
         </section>
 
-         {/* ================= SECTION 5: QUIZ & FOOTER ================= */}
-
+        {/* ================= SECTION 5: QUIZ & FOOTER ================= */}
         <section className="h-screen w-full snap-start snap-always overflow-y-auto overflow-x-hidden hide-scrollbar scroll-smooth relative">
-
           <div className="flex flex-col w-full min-h-screen relative isolate">
-
-           
-
+            
             <img className="absolute inset-0 w-full h-full object-cover object-[80%_center] md:object-center z-0 fixed" alt="Quiz Background" src={BgQuiz} />
-
             <div className="absolute inset-0 bg-[#051e27]/80 z-10 fixed"></div>
 
-
-
             {/* --- QUIZ AREA --- */}
-
             <div className="h-screen w-full relative flex flex-col items-center justify-center px-4 shrink-0 z-20">
-
               <div className="text-center mb-6 sm:mb-8">
-
                 <h2 className="text-3xl sm:text-5xl font-display font-bold text-white drop-shadow-lg">Quiz Berkendara</h2>
-
                 <p className="text-white/80 mt-1 sm:mt-2 text-sm sm:text-lg">Jawab semua benar (10/10) untuk mendapatkan E-Sertifikat!</p>
-
               </div>
 
-
-
-              <div className="w-full max-w-3xl bg-black/50 border border-white/20 backdrop-blur-xl rounded-3xl p-5 sm:p-12 shadow-2xl min-h-[300px] flex flex-col justify-center">
-
-               
-
+              {/* DITAMBAHKAN max-h-[80vh] overflow-y-auto hide-scrollbar AGAR BISA SCROLL */}
+              <div className="w-full max-w-3xl bg-black/50 border border-white/20 backdrop-blur-xl rounded-3xl p-5 sm:p-12 shadow-2xl min-h-[300px] max-h-[80vh] overflow-y-auto hide-scrollbar flex flex-col justify-start sm:justify-center">
+                
                 {/* STATE 1: BELUM MEMULAI KUIS (INPUT NAMA) */}
-
                 {!isQuizStarted && !showResult && (
-
                   <form onSubmit={startQuiz} className="flex flex-col items-center animate-fade-in w-full max-w-md mx-auto">
-
                     <div className="text-6xl mb-6">🏆</div>
-
                     <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 text-center">Siap Menguji Pengetahuan Anda?</h3>
-
                     <p className="text-sm text-white/60 mb-6 text-center">Masukkan nama lengkap Anda. Nama ini akan dicetak pada Sertifikat Kelulusan jika Anda berhasil menjawab semua soal dengan benar.</p>
-
-                   
-
-                    <input
-
-                      type="text"
-
+                    
+                    <input 
+                      type="text" 
                       required
-
-                      placeholder="Masukkan nama lengkap Anda..."
-
+                      placeholder="Masukkan nama lengkap Anda..." 
                       value={userName}
-
                       onChange={(e) => setUserName(e.target.value)}
-
                       className="w-full px-5 py-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition-all text-center text-lg mb-6"
-
                     />
-
-                   
-
-                    <button
-
+                    
+                    <button 
                       type="submit"
-
                       disabled={userName.trim().length < 3}
-
                       className="w-full px-8 py-4 bg-amber-400 text-slate-900 disabled:opacity-50 disabled:cursor-not-allowed rounded-full font-bold hover:bg-amber-300 transition-colors shadow-lg shadow-amber-400/20 text-base sm:text-lg uppercase tracking-wide"
-
                     >
-
                       Mulai Quiz
-
                     </button>
-
                   </form>
-
                 )}
-
-
 
                 {/* STATE 2: KUIS BERLANGSUNG */}
-
                 {isQuizStarted && !showResult && (
-
                   <div className="animate-fade-in w-full">
-
                     <div className="flex justify-between items-center text-amber-400 text-xs sm:text-sm font-bold mb-4 sm:mb-6 uppercase tracking-wider">
-
                       <span>Pertanyaan {currentQ + 1} / 10</span>
-
                       <span className="text-white/50 bg-white/10 px-3 py-1 rounded-full">{userName}</span>
-
                     </div>
-
                     <h3 className="text-lg sm:text-2xl font-bold text-white mb-6 sm:mb-8 leading-relaxed">
-
                       {quizQuestions[currentQ].q}
-
                     </h3>
-
                     <div className="flex flex-col space-y-3 sm:space-y-4">
-
                       {quizQuestions[currentQ].options.map((opt, idx) => (
-
-                        <button
-
-                          key={idx}
-
+                        <button 
+                          key={idx} 
                           onClick={() => handleAnswer(idx)}
-
                           className="w-full text-left px-4 py-3 sm:px-6 sm:py-4 rounded-xl bg-white/10 hover:bg-amber-400 hover:text-slate-900 border border-white/10 transition-all font-sans text-sm sm:text-base text-white font-medium group"
-
                         >
-
                           <span className="inline-block w-6 h-6 rounded-full border border-current mr-3 text-center leading-5 text-sm group-hover:bg-slate-900 group-hover:text-amber-400">
-
                             {String.fromCharCode(65 + idx)}
-
                           </span>
-
                           {opt}
-
                         </button>
-
                       ))}
-
                     </div>
-
                   </div>
-
                 )}
-
-
 
                 {/* STATE 3: HASIL KUIS */}
-
                 {showResult && (
-
                   <div className="text-center animate-fade-in py-2 sm:py-6 flex flex-col items-center">
-
                     <h3 className="text-xl sm:text-3xl font-bold text-white mb-4">Hasil Evaluasi: <span className="text-amber-400">{userName}</span></h3>
-
-                   
-
+                    
                     <div className="text-6xl sm:text-7xl font-display font-bold mb-6">
-
                       {score} <span className="text-2xl sm:text-3xl text-white/50">/ 10</span>
-
                     </div>
-
-                   
-
+                    
                     {score === 10 ? (
-
-                      // LULUS SEMPURNA (10/10)
-
                       <>
-
                         <div className="inline-block px-6 py-2 sm:px-8 sm:py-3 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500 text-base sm:text-xl font-bold mb-4 shadow-[0_0_15px_rgba(16,185,129,0.3)] animate-pulse">
-
                           🎉 LULUS! SANGAT AMAN
-
                         </div>
-
                         <p className="text-sm sm:text-base text-white/80 mb-8 max-w-md mx-auto">
-
                           Sempurna! Anda memiliki pemahaman yang luar biasa tentang keselamatan berkendara. Unduh sertifikat kelulusan Anda di bawah ini.
-
                         </p>
-
                         <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
-
-                          <button
-
-                            onClick={generateCertificate}
-
+                          <button 
+                            onClick={generateCertificate} 
                             disabled={isGeneratingCert}
-
                             className="px-6 py-3 sm:px-8 sm:py-4 bg-emerald-500 text-white rounded-full font-bold hover:bg-emerald-400 transition-colors shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2"
-
                           >
-
                             {isGeneratingCert ? (
-
                               <span className="animate-spin text-xl">⏳</span>
-
                             ) : (
-
                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
-
                             )}
-
                             {isGeneratingCert ? "Memproses..." : "Unduh Sertifikat PDF"}
-
                           </button>
-
                           <button onClick={() => { setIsQuizStarted(false); resetQuiz(); setUserName(""); }} className="px-6 py-3 sm:px-8 sm:py-4 bg-white/10 text-white rounded-full font-bold hover:bg-white/20 transition-colors">
-
                             Selesai
-
                           </button>
-
                         </div>
-
                       </>
-
                     ) : (
-
-                      // TIDAK LULUS (< 10)
-
                       <>
-
                         <div className="inline-block px-6 py-2 sm:px-8 sm:py-3 rounded-full bg-red-500/20 text-red-500 border border-red-500 text-base sm:text-xl font-bold mb-4">
-
                           {score === 0 ? "❌ SANGAT TIDAK AMAN" : "⚠️ TIDAK LULUS"}
-
                         </div>
-
                         <p className="text-sm sm:text-base text-white/80 mb-8 max-w-md mx-auto">
-
-                          {score === 0
-
-                            ? "Sangat disayangkan, Anda gagal menjawab semua soal. Silakan baca materi kembali dari awal demi keselamatan Anda."
-
+                          {score === 0 
+                            ? "Sangat disayangkan, Anda gagal menjawab semua soal. Silakan baca materi kembali dari awal demi keselamatan Anda." 
                             : "Pemahaman Anda masih kurang. Anda harus mendapatkan nilai sempurna (10) untuk mendapatkan sertifikat."}
-
                         </p>
-
                         <button onClick={resetQuiz} className="px-6 py-3 sm:px-8 sm:py-4 bg-amber-400 text-slate-900 rounded-full font-bold hover:bg-amber-300 transition-colors shadow-lg shadow-amber-400/20 w-full sm:w-auto">
-
                           Ulangi Quiz
-
                         </button>
-
                       </>
-
                     )}
-
                   </div>
-
                 )}
-
               </div>
 
-
-
-              {/* === INDIKATOR SCROLL INFO DI BAWAH QUIZ === */}
-              <div className="absolute bottom-4 left-0 right-0 z-30 flex flex-col items-center justify-center text-white/60 text-[10px] sm:text-sm animate-bounce cursor-default">
-                <span>Scroll ke bawah untuk info</span>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 sm:w-5 sm:h-5 mt-1 text-amber-400">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3" />
-                </svg>
-              </div>
+              {/* === INDIKATOR SCROLL INFO DI BAWAH QUIZ HANYA MUNCUL SETELAH SELESAI === */}
+              {showResult && (
+                <div className="absolute bottom-4 left-0 right-0 z-30 flex flex-col items-center justify-center text-white/60 text-[10px] sm:text-sm animate-bounce cursor-default">
+                  <span>Scroll ke bawah untuk info</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 sm:w-5 sm:h-5 mt-1 text-amber-400">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3" />
+                  </svg>
+                </div>
+              )}
 
             </div>
 
